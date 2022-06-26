@@ -1,0 +1,34 @@
+{% extends "1_3_layout.html" %}
+
+{% block title %}
+filterの利用
+{% endblock %}
+
+{% block content %}
+<h2>文字と数字を入力してください</h2>
+<form method="post" action="/filter">
+<table>
+    <tr>
+        <th>text</th>
+        <td> <input type="text" name="t"> </td>
+    </tr>
+    <tr>
+        <th>number</th>
+        <td> <input type="number" name="n"> </td>
+    </tr>
+    <th></th>
+    <td>
+        <input type="submit">
+    </td>
+</form>
+</table>
+
+<br>
+入力した文字 : {{text}} <br>
+大文字 : {{text | upper}} <br>
+小文字 : {{text | lower}}
+<br><br>
+入力した数字 : {{number}} <br>
+絶対値 : {{number | abs}} <br>
+２乗 : {{number | square}} <br>
+{% endblock %}

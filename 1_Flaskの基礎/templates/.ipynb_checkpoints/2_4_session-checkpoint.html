@@ -1,0 +1,15 @@
+{% extends "1_3_layout.html" %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+{{ content }}
+<div>
+    <form method="post" action="/session">
+        <input type="text" name="t">
+        <input type="submit">
+    </form>
+</div>
+{% endblock %}

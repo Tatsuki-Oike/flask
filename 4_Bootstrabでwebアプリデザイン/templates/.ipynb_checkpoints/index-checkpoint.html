@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+FlaskでWebアプリ作成
+{% endblock %}
+
+{% block content %}
+<div class="row">
+            <div class="col-md">
+                <form action="/deviation_value" method="get">
+                    <button type="submit" class="p-3 btn btn-primary btn-block" style="font-size:2.5vw">偏差値アプリ</button>
+                </form>
+                <br>
+                <form action="/linear" method="get">
+                    <button type="submit" class="p-3 btn btn-secondary btn-block" style="font-size:2.5vw">単回帰分析シミュレーションアプリ</button>
+                </form>
+                <br>
+                <form action="/image" method="get">
+                    <button type="submit" class="p-3 btn btn-success btn-block" style="font-size:2.5vw">画像表示アプリ</button>
+                </form>
+                <br>
+                <form action="/image_detect" method="get">
+                    <button type="submit" class="p-3 btn btn-warning btn-block" style="font-size:2.5vw">物体検知アプリ</button>
+                </form>
+                <br>
+                <form action="/image_generate" method="get">
+                    <button type="submit" class="p-3 btn btn-info btn-block" style="font-size:2.5vw">画像生成アプリ</button>
+                </form>
+            </div>
+</div>
+{% endblock %}

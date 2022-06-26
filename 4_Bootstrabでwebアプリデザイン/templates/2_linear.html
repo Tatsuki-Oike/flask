@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block title %}
+単回帰分析アプリ
+{% endblock %}
+
+{% block content %}
+<div class="card" style="font-size: 20pt;">
+  <div class="card-header">
+    シミュレーションデータ作成
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+        x~Norm(μ,σ<sup>2</sup>)<br>
+        y = ax+b+ε, ε~Norm(0,σ<sub>ε</sub><sup>2</sup>)  
+    </p>
+  </div>
+</div>
+<br><br>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ulr>
+    {% for message in messages %}
+        <li class="alert alert-danger">{{message}}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+<form method="post" action="/linear">
+    <div class="form-row">
+    <div class="col">
+        <label for="item1" style="font-size: 1.5vw;">データ数</label>
+        <input type="number" class="p-4 form-control" id="item1" name="input">
+    </div>
+    <div class="col">
+        <label for="item2" style="font-size: 1.5vw;">μ</label>
+        <input type="number" class="p-4 form-control" id="item2" name="input">
+    </div>
+    <div class="col">
+        <label for="item3" style="font-size: 1.5vw;">σ</label>
+        <input type="number" class="p-4 form-control" id="item3" name="input">      
+    </div>
+    </div>
+    <div class="form-row">
+    <div class="col-md-4 mb-3">
+        <label for="item4" style="font-size: 1.5vw;">a</label>
+        <input type="number" class="p-4 form-control" id="item4" name="input">
+    </div>
+    <div class="col">
+        <label for="item5" style="font-size: 1.5vw;">b</label>
+        <input type="number" class="p-4 form-control" id="item5" name="input">
+    </div>
+    <div class="col">
+        <label for="item5" style="font-size: 1.5vw;">σ<sub>ε</sub></label>
+        <input type="number" class="p-4 form-control" id="item5" name="input">      
+    </div>
+    </div>
+    <input input type="submit" class="p-3 btn btn-primary btn-block" value="単回帰分析のシミュレーションを行う" style="font-size:1.5vw">
+</form>
+
+{% if post %}
+<br><br>
+<div class="display-3" style="color:black"> <span style="font-weight: 900;">
+    結果
+</span></div>
+
+<h2>入力した値 {{ values }}</h2>
+<br>
+
+<table>
+  <tr align="center" style="font-size: 250%;">
+    <th>x~Norm({{values[1]}},{{values[2]}}<sup>2</sup>)</th>
+    <th>y = {{a_hat[0][0]}}x+ {{b_hat[0]}}+ε</th>
+  </tr>
+  <tr>
+    <td><img src="data:image/png;base64,{{ img }}"/></td>
+    <td><img src="data:image/png;base64,{{ img2 }}"/></td>
+  </tr>
+</table>
+
+<br><br>
+{% endif %}
+
+{% endblock %}

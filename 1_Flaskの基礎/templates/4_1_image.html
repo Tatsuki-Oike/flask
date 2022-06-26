@@ -1,0 +1,25 @@
+{% extends "1_3_layout.html" %}
+
+{% block title %}
+画像のアップロードと表示
+{% endblock %}
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    {% for message in messages %}
+        <span style="color: #B22222;">{{ message }}</span>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
+<h2>画像のアップロード</h2>
+<form action="/image" method="post" enctype="multipart/form-data">
+  <input type="file" name="image" accept="image/png, image/jpeg">
+  <button type="submit">画像を表示</button>
+</form>
+
+<br>
+
+<img src="{{ content }}" style="width: 500px;">
+{% endblock %}

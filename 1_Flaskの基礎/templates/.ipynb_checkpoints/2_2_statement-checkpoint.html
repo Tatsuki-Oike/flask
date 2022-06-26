@@ -1,0 +1,24 @@
+{% extends "1_3_layout.html" %}
+
+{% block title %}
+statement
+{% endblock %}
+
+{% block content %}
+<div>
+    <form method="post" action="/statement">
+        <input type="submit" value="クリック">
+    </form>
+</div>
+
+{% if post %}
+<ul>
+{% for d in data %}    
+    <li> {{d}} </li>
+{% endfor %}
+</ul>
+    設定した数字 : {{number}} <br>
+    {% set number = 3%}
+    セットした数字 : {{number}}
+{% endif %}
+{% endblock %}
