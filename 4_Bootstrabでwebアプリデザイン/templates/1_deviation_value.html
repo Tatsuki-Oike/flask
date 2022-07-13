@@ -40,13 +40,14 @@
 
 {% if post %} 
 <br><br>
-<div class="display-3" style="color:black"> <span style="font-weight: 900;">
-    結果
-</span></div>
-<br><h2>あなたの偏差値は {{ value }} で、上位 {{ percent }} %です。</h2><br>
-<div style="text-align: center">
-<img src="data:image/png;base64,{{ img }}" style="width: 49.8%;"/>
-<img src="data:image/png;base64,{{ img2 }}" style="width: 49.8%;"/>
+<div class="display-3" style="color:black"> 
+    <span style="font-weight: 900;"> 結果 </span>
+</div>
+<br>
+<h2>あなたの偏差値は {{ value }} で、上位 {{ percent }} %です。</h2><br>
+<div class="row">
+        <img src="data:image/png;base64,{{ img }}" class="col-6 img-fluid">
+        <img src="data:image/png;base64,{{ img2 }}"class="col-6 img-fluid">
 </div>
 <br><br>
 {% endif %}

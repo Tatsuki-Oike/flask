@@ -1,12 +1,12 @@
 from flask import Flask, render_template, url_for, request, redirect, session, flash
 
 # python基本ライブラリ
+import numpy as np
+from scipy import stats
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import japanize_matplotlib
-import numpy as np
-from scipy import stats
 
 # matplotlib　表示
 import base64
@@ -21,7 +21,7 @@ import os
 # pytorch
 import torch
 from PIL import Image
-from function import detection
+from function import generation
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "jfaogiehi2iw8jLD0ejJ"
@@ -50,27 +50,25 @@ def deviation_value_post():
     if not mu:
         flash("平均値を入力してください")
         input_flg = False
-    else:
-        mu = int(mu)
         
     if not sd:
         flash("標準偏差を入力してください")
         input_flg = False
-    else:
-        sd = int(sd)
         
     if not sample:
         flash("自分の点数を入力してください")
         input_flg = False
-    else:
-        sample = int(sample)
         
     if not input_flg:
-        return redirect(url_for("deviation_value_post"))
+        return redirect(url_for("deviation_value_get"))
     
-    post = True
+    # int型に変換
+    mu = int(mu)
+    sd = int(sd)
+    sample = int(sample)
     
     # 値を求める
+    post = True
     x = np.arange(0,100,0.01)
     y = stats.norm.pdf(x,mu,sd)
     t = (x - mu)/sd*10 + 50
@@ -81,7 +79,11 @@ def deviation_value_post():
     plot1 = dev_plot1(x, y, sample, mu, sd)
     plot2 = dev_plot2(x, t, sample, sample_t)
     
-    return render_template("1_deviation_value.html", img=plot1, img2 = plot2, value = round(sample_t, 1), percent = round(percent, 1), post=post)
+    return render_template("1_deviation_value.html",
+                           img=plot1, img2 = plot2,
+                           value = round(sample_t, 1),
+                           percent = round(percent, 1),
+                           post=post)
 
 def dev_plot1(x, y, sample, mu, sd):
     
@@ -139,7 +141,7 @@ def linear_post():
         input_flg = False
     
     if not input_flg:
-        return redirect(url_for("linear_post"))
+        return redirect(url_for("linear_get"))
     
     post = True
     
@@ -161,14 +163,19 @@ def linear_post():
     plot1 = sample_plot(x, y)
     plot2 = model_plot(x, y, y_hat)
     
-    return render_template("2_linear.html", img=plot1, img2 = plot2, post = post, values=values, a_hat=round(a_hat, 2), b_hat=round(b_hat,2))
+    return render_template("2_linear.html",
+                           img=plot1, img2 = plot2,
+                           post = post,
+                           values=values,
+                           a_hat=round(a_hat, 2),
+                           b_hat=round(b_hat,2))
 
 def linear_f(x, y):
     n = len(x)
     a_hat = ((np.dot(x,y) - y.sum()*x.sum()/n))/((x**2).sum() - x.sum()**2/n)
     b_hat = (y.sum() - a_hat*x.sum())/n
     return a_hat, b_hat
-    
+
 def sample_plot(x, y):
     
     # プロットの作成
@@ -202,54 +209,10 @@ def model_plot(x, y, y_hat):
     
     return plot
 
-# 3 画像のアップロードと表示
-@app.route('/image', methods=['GET'])
-def image_get():
-    return render_template('3_image.html')
-
-@app.route('/image', methods=['POST'])
-def image_post():
-    
-    # ファイルの作成
-    img_dir = "static/images/"
-    
-    if not os.path.isfile(img_dir):
-        shutil.rmtree(img_dir)
-        
-    os.makedirs(img_dir, exist_ok=True)
-    
-    # 入力受け取り
-    input_image = request.files['image']
-    
-    # Flashの設定
-    input_flg = True
-    
-    if not input_image:
-        flash("画像を入力してください")
-        input_flg = False
-    else:
-        stream = input_image.stream
-        
-    if not input_flg:
-        return redirect(url_for("image_post"))
-    
-    post = True
-    
-    # 画像変換
-    img_array = np.asarray(bytearray(stream.read()), dtype=np.uint8)
-    img = cv2.imdecode(img_array, 1)
-    
-    # 画像保存
-    dt_now = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
-    img_path = img_dir + dt_now + ".jpg"
-    cv2.imwrite(img_path, img)
-    
-    return render_template('3_image.html', content=img_path, post=post)
-
-# 4 物体検知アプリ
+# 3 物体検知アプリ
 @app.route('/image_detect', methods=['GET'])
 def image_detect_get():
-    return render_template('4_image_detect.html')
+    return render_template('3_image_detect.html')
 
 @app.route('/image_detect', methods=['POST'])
 def image_detect_post():
@@ -260,7 +223,7 @@ def image_detect_post():
     dir_list = [img_dir, result_dir]
     
     for item in dir_list:
-        if not os.path.isfile(item):
+        if os.path.exists(item):
             shutil.rmtree(item)
     
     os.makedirs(img_dir, exist_ok=True)
@@ -275,14 +238,14 @@ def image_detect_post():
     if not input_image:
         flash("画像を入力してください")
         input_flg = False
-    else:
-        stream = input_image.stream
         
     if not input_flg:
-        return redirect(url_for("image_detect_post"))
+        return redirect(url_for("image_detect_get"))
     
     post = True
     
+    # 画像の変換
+    stream = input_image.stream
     img_array = np.asarray(bytearray(stream.read()), dtype=np.uint8)
     img = cv2.imdecode(img_array, 1)
     
@@ -295,7 +258,10 @@ def image_detect_post():
     # 物体検知
     detect_image(img_path)
     
-    return render_template('4_image_detect.html', content=img_path, content2=result_path, post=post)
+    return render_template('3_image_detect.html',
+                           post = post,
+                           content=img_path,
+                           content2=result_path)
 
 def detect_image(img_path):
     
@@ -306,10 +272,11 @@ def detect_image(img_path):
     
     return 
 
-# 5 画像生成アプリ
+# 4 画像生成アプリ
 @app.route('/image_generate', methods=['GET'])
 def image_generate_get():
-    return render_template('5_image_generate.html', title='Flaskでwebアプリ作成')
+    return render_template('4_image_generate.html',
+                           title='Flaskでwebアプリ作成')
 
 @app.route('/image_generate', methods=['POST'])
 def image_generate_post():
@@ -317,7 +284,7 @@ def image_generate_post():
     # ファイルの作成
     generate_dir = 'static/generated_images'
     
-    if not os.path.isfile(generate_dir):
+    if os.path.exists(generate_dir):
         shutil.rmtree(generate_dir)
         
     os.makedirs(generate_dir, exist_ok=True)
@@ -331,7 +298,7 @@ def image_generate_post():
     
     if ("" in [number, n]):
         flash('全ての値を入力してください')
-        return redirect(url_for("image_generate_post"))
+        return redirect(url_for("image_generate_get"))
     else :
         number = int(number)
         n = int(n)
@@ -350,22 +317,12 @@ def image_generate_post():
     post = True
     
     # 画像の生成
-    img_path = detection.generate_image(int(number), int(n))
+    img_path = generation.generate_image(number, n)
     
-    return render_template('5_image_generate.html', title='Flaskでwebアプリ作成', content=img_path, post=post)
-
-@app.context_processor
-def override_url_for():
-    return dict(url_for=dated_url_for)
-
-def dated_url_for(endpoint, **values):
-    if endpoint == 'static':
-        filename = values.get('filename', None)
-        if filename:
-            file_path = os.path.join(app.root_path,
-                                 endpoint, filename)
-            values['q'] = int(os.stat(file_path).st_mtime)
-    return url_for(endpoint, **values)
+    return render_template('4_image_generate.html',
+                           post = post,
+                           title='Flaskでwebアプリ作成',
+                           content=img_path)
 
 if __name__ == '__main__':
     app.run(debug=True)

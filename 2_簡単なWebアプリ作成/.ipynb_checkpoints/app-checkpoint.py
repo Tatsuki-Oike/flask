@@ -60,7 +60,7 @@ def deviation_value_post():
         input_flg = False
         
     if not input_flg:
-        return redirect(url_for("deviation_value_post"))
+        return redirect(url_for("deviation_value_get"))
     
     # int型に変換
     mu = int(mu)
@@ -141,7 +141,7 @@ def linear_post():
         input_flg = False
     
     if not input_flg:
-        return redirect(url_for("linear_post"))
+        return redirect(url_for("linear_get"))
     
     post = True
     
@@ -223,7 +223,7 @@ def image_detect_post():
     dir_list = [img_dir, result_dir]
     
     for item in dir_list:
-        if os.path.isfile(item):
+        if os.path.exists(item):
             shutil.rmtree(item)
     
     os.makedirs(img_dir, exist_ok=True)
@@ -240,7 +240,7 @@ def image_detect_post():
         input_flg = False
         
     if not input_flg:
-        return redirect(url_for("image_detect_post"))
+        return redirect(url_for("image_detect_get"))
     
     # 画像の変換
     stream = input_image.stream
@@ -281,7 +281,7 @@ def image_generate_post():
     # ファイルの作成
     generate_dir = 'static/generated_images'
     
-    if os.path.isfile(generate_dir):
+    if os.path.exists(generate_dir):
         shutil.rmtree(generate_dir)
         
     os.makedirs(generate_dir, exist_ok=True)
@@ -295,7 +295,7 @@ def image_generate_post():
     
     if ("" in [number, n]):
         flash('全ての値を入力してください')
-        return redirect(url_for("image_generate_post"))
+        return redirect(url_for("image_generate_get"))
     else :
         number = int(number)
         n = int(n)
@@ -330,6 +330,7 @@ def dated_url_for(endpoint, **values):
                                  endpoint, filename)
             values['q'] = int(os.stat(file_path).st_mtime)
     return url_for(endpoint, **values)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

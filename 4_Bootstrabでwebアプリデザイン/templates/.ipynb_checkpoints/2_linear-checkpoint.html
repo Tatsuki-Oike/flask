@@ -6,15 +6,15 @@
 
 {% block content %}
 <div class="card" style="font-size: 20pt;">
-  <div class="card-header">
-    シミュレーションデータ作成
-  </div>
-  <div class="card-body">
-    <p class="card-text">
-        x~Norm(μ,σ<sup>2</sup>)<br>
-        y = ax+b+ε, ε~Norm(0,σ<sub>ε</sub><sup>2</sup>)  
-    </p>
-  </div>
+    <div class="card-header">
+        シミュレーションデータ作成
+    </div>
+    <div class="card-body">
+        <p class="card-text">
+            x~Norm(μ,σ<sup>2</sup>)<br>
+            y = ax+b+ε, ε~Norm(0,σ<sub>ε</sub><sup>2</sup>)  
+        </p>
+    </div>
 </div>
 <br><br>
 
@@ -44,7 +44,7 @@
     </div>
     </div>
     <div class="form-row">
-    <div class="col-md-4 mb-3">
+    <div class="col mb-3">
         <label for="item4" style="font-size: 1.5vw;">a</label>
         <input type="number" class="p-4 form-control" id="item4" name="input">
     </div>
@@ -62,25 +62,24 @@
 
 {% if post %}
 <br><br>
-<div class="display-3" style="color:black"> <span style="font-weight: 900;">
-    結果
-</span></div>
+<div class="display-3" style="color:black"> 
+    <span style="font-weight: 900;">結果</span>
+</div>
 
 <h2>入力した値 {{ values }}</h2>
 <br>
 
-<table>
-  <tr align="center" style="font-size: 250%;">
-    <th>x~Norm({{values[1]}},{{values[2]}}<sup>2</sup>)</th>
-    <th>y = {{a_hat[0][0]}}x+ {{b_hat[0]}}+ε</th>
-  </tr>
-  <tr>
-    <td><img src="data:image/png;base64,{{ img }}"/></td>
-    <td><img src="data:image/png;base64,{{ img2 }}"/></td>
-  </tr>
-</table>
-
-<br><br>
+<div class="row" style="font-size: 3vw;" align="center">
+    <div class="col-6">
+        x~Norm({{values[1]}},{{values[2]}}<sup>2</sup>)
+    </div>
+    <div class="col-6">
+        y = {{a_hat}}x+ {{b_hat}}+ε
+    </div>
+</div>
+<div class="row">
+        <img src="data:image/png;base64,{{ img }}" class="col-6 img-fluid">
+        <img src="data:image/png;base64,{{ img2 }}" class="col-6 img-fluid">
+</div>
 {% endif %}
-
 {% endblock %}

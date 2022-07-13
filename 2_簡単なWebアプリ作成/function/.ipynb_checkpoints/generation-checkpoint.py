@@ -61,21 +61,21 @@ def concat_noise_label(noise, label, device):
         
 def generate_image(number, n):
     
-    result_dir = "static/generated_images/"
+    # ノイズとラベル
+    label_list = [number]*n
+    sample_label = torch.tensor(label_list, dtype=torch.long, device=device)
+    sample_noise = torch.randn(n, n_channel, 1, 1, device=device) 
+    sample_noise_label = concat_noise_label(sample_noise, sample_label, device) 
+    
+    # Generatorの定義と画像の生成
     generator = Generator().to('cpu')
     generator.load_state_dict(torch.load('generator.pth', map_location=torch.device('cpu')))
-    number = number
-    n = n
-    label_list = [number]*n
-
-    sample_noise = torch.randn(n, n_channel, 1, 1, device=device) 
-    sample_label = torch.tensor(label_list, dtype=torch.long, device=device)
-    sample_label = torch.tensor(sample_label, dtype=torch.long, device=device)
-    sample_noise_label = concat_noise_label(sample_noise, sample_label, device) 
     generator.eval
     y = generator(sample_noise_label)
-    dt_now = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
     
+    # 生成画像の保存
+    result_dir = "static/generated_images/"
+    dt_now = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
     path_list = []
     for i in range(len(y)):  
         result_img_path = result_dir + dt_now + str(i)+ ".jpg"
