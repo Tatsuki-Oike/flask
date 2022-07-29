@@ -1,5 +1,5 @@
 # 1 Youtube
-youtubeの「R言語の基礎」シリーズで解説しているコードを載せています！
+youtubeの「FlaskでWebアプリ作成」シリーズで解説しているコードを載せています！
 
 <a href="https://www.youtube.com/watch?v=6hO5op_V5ao&list=PL7BUpEjz_maSSkE1LoWYX2S0zB9XshxVH">　<img src="image/git_image.jpeg">　</a>
 
