@@ -7,10 +7,10 @@ youtubeの「R言語の基礎」シリーズで解説しているコードを載
 
 # 2 R言語の基礎の動画
 
-作成したアプリのURLはこちらから↓
+作成したアプリのURLはこちらから↓ <br>
 https://dkenapp.herokuapp.com/?
 
-「FlaskでWebアプリ作成」の再生リスト
+「FlaskでWebアプリ作成」の再生リスト <br>
 https://www.youtube.com/watch?v=6hO5op_V5ao&list=PL7BUpEjz_maSSkE1LoWYX2S0zB9XshxVH
 
 ## Flaskの概要
