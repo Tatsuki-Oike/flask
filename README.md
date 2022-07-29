@@ -5,7 +5,7 @@ youtubeの「FlaskでWebアプリ作成」シリーズで解説しているコ�
 
 <br>
 
-# 2 R言語の基礎の動画
+# 2 FlaskでWebアプリ作成の動画
 
 作成したアプリのURLはこちらから↓ <br>
 https://dkenapp.herokuapp.com/?
